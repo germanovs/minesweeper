@@ -1,1 +1,1 @@
-type cellState = 'mine' | 'closed' | number;
+type cellState = 'mine' | 'marked' | 'closed' | number;

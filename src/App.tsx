@@ -34,7 +34,7 @@ function App() {
 		setDisplayGrid(displayGrid);
 	}
 
-	const findMinesAround = (row: number, col: number, grid: boolean[][]) => {
+	const countMinesAround = (row: number, col: number, grid: boolean[][]) => {
 		const map = [
 			grid[row - 1] === undefined || grid[row - 1][col - 1] === undefined ? false : grid[row - 1][col - 1],
 			grid[row - 1] === undefined ? false : grid[row - 1][col],
@@ -48,13 +48,27 @@ function App() {
 		return map.filter(elem => elem).length;
 	}
 
-	const defineCellNumber = (rowIndex: number, cellIndex: number) => {
-		const minesCount = findMinesAround(rowIndex, cellIndex, grid);
-		setDisplayGrid(prev => {
-			const newDisplayGrid = JSON.parse(JSON.stringify(prev));
-			newDisplayGrid[rowIndex][cellIndex] = minesCount;
-			return newDisplayGrid;
-		});
+	const defineCellNumber = (rowIndex: number, cellIndex: number, displayGrid: cellState[][]) => {
+		const minesCount = countMinesAround(rowIndex, cellIndex, grid);
+		console.log(rowIndex, cellIndex);
+		displayGrid[rowIndex][cellIndex] = minesCount;
+
+		if (minesCount === 0) {
+			if (rowIndex > 0 && displayGrid[rowIndex - 1][cellIndex] === 'closed') {
+				defineCellNumber(rowIndex - 1, cellIndex, displayGrid);
+			}
+			if (rowIndex < 9 && displayGrid[rowIndex + 1][cellIndex] === 'closed') {
+				defineCellNumber(rowIndex + 1, cellIndex, displayGrid);
+			}
+			if (cellIndex > 0 && displayGrid[rowIndex][cellIndex - 1] === 'closed') {
+				defineCellNumber(rowIndex, cellIndex - 1, displayGrid);
+			}
+			if (cellIndex < 9 && displayGrid[rowIndex][cellIndex + 1] === 'closed') {
+				defineCellNumber(rowIndex, cellIndex + 1, displayGrid);
+			}
+		}
+
+		return;
 	}
 
 	const openCell = (rowIndex: number, cellIndex: number): void => {
@@ -72,7 +86,8 @@ function App() {
 			return;
 		}
 
-		defineCellNumber(rowIndex, cellIndex);
+		defineCellNumber(rowIndex, cellIndex, newDisplayGrid);
+		setDisplayGrid(newDisplayGrid);
 	}
 
 	useEffect(() => {
@@ -92,7 +107,7 @@ function App() {
 								<div 
 									key={rowIndex + '-' + cellIndex}
 									className='cell'
-									style={{ backgroundColor: grid[rowIndex][cellIndex] ? '#ffe8c1' : 'inherit' }}
+									// style={{ backgroundColor: grid[rowIndex][cellIndex] ? '#ffe8c1' : 'inherit' }}
 									onClick={() => openCell(rowIndex, cellIndex)}>
 									{
 										cell === 'closed'
