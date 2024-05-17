@@ -91,6 +91,13 @@ function App() {
 	}
 
 	useEffect(() => {
+		const displayGridFlat = displayGrid.flat();
+		if (displayGridFlat.every(elem => elem !== 'closed')) {
+			window.alert('You win!');
+		}
+	}, [displayGrid])
+
+	useEffect(() => {
 		createNewGame();
 	}, []);
 
