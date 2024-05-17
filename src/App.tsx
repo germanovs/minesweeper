@@ -34,6 +34,29 @@ function App() {
 		setDisplayGrid(displayGrid);
 	}
 
+	const findMinesAround = (row: number, col: number, grid: boolean[][]) => {
+		const map = [
+			grid[row - 1] === undefined || grid[row - 1][col - 1] === undefined ? false : grid[row - 1][col - 1],
+			grid[row - 1] === undefined ? false : grid[row - 1][col],
+			grid[row - 1] === undefined || grid[row - 1][col + 1] === undefined ? false : grid[row - 1][col + 1],
+			grid[row][col - 1] === undefined ? false : grid[row][col - 1],
+			grid[row][col + 1] === undefined ? false : grid[row][col + 1],
+			grid[row + 1] === undefined || grid[row + 1][col - 1] === undefined ? false : grid[row + 1][col - 1],
+			grid[row + 1] === undefined ? false : grid[row + 1][col],
+			grid[row + 1] === undefined || grid[row + 1][col + 1] === undefined ? false : grid[row + 1][col + 1],
+		];
+		return map.filter(elem => elem).length;
+	}
+
+	const defineCellNumber = (rowIndex: number, cellIndex: number) => {
+		const minesCount = findMinesAround(rowIndex, cellIndex, grid);
+		setDisplayGrid(prev => {
+			const newDisplayGrid = JSON.parse(JSON.stringify(prev));
+			newDisplayGrid[rowIndex][cellIndex] = minesCount;
+			return newDisplayGrid;
+		});
+	}
+
 	const openCell = (rowIndex: number, cellIndex: number): void => {
 		const cellState = displayGrid[rowIndex][cellIndex];
 		if (cellState !== 'closed') {
@@ -41,10 +64,15 @@ function App() {
 		}
 
 		const newDisplayGrid = JSON.parse(JSON.stringify(displayGrid));
-		newDisplayGrid[rowIndex][cellIndex] = grid[rowIndex][cellIndex] ? '!' : 0;
-		console.log(newDisplayGrid);
-		
-		setDisplayGrid(newDisplayGrid);
+
+		if (grid[rowIndex][cellIndex]) {
+			newDisplayGrid[rowIndex][cellIndex] = 'mine';
+			setDisplayGrid(newDisplayGrid);
+			window.alert('You lost');
+			return;
+		}
+
+		defineCellNumber(rowIndex, cellIndex);
 	}
 
 	useEffect(() => {
