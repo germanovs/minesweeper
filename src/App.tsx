@@ -90,6 +90,19 @@ function App() {
 		setDisplayGrid(newDisplayGrid);
 	}
 
+	const markCell = (e, row, col) => {
+		e.preventDefault();
+		setDisplayGrid(prev => {
+			const newDisplayGrid = JSON.parse(JSON.stringify(prev));
+			if (newDisplayGrid[row][col] === 'closed') {
+				newDisplayGrid[row][col] = 'marked';
+			} else if (newDisplayGrid[row][col] === 'marked') {
+				newDisplayGrid[row][col] = 'closed';
+			}
+			return newDisplayGrid;
+		})
+	}
+
 	useEffect(() => {
 		const displayGridFlat = displayGrid.flat();
 		if (displayGridFlat.every(elem => elem !== 'closed')) {
@@ -115,15 +128,19 @@ function App() {
 									key={rowIndex + '-' + cellIndex}
 									className='cell'
 									style={{ backgroundColor: typeof cell === 'number' ? 'lightgrey' : 'inherit' }}
-									onClick={() => openCell(rowIndex, cellIndex)}>
+									onClick={() => openCell(rowIndex, cellIndex)}
+									onContextMenu={(e) => markCell(e, rowIndex, cellIndex)}
+									>
 									{
 										cell === 'closed'
 											? ''
 											: cell === 'mine' 
-												? '!' 
-												: cell === 0
-													? ''
-													: cell
+												? '!'
+												: cell === 'marked'
+													? 'x'
+													: cell === 0
+														? ''
+														: cell
 									}
 								</div>
 							)
