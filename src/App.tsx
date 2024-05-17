@@ -114,14 +114,16 @@ function App() {
 								<div 
 									key={rowIndex + '-' + cellIndex}
 									className='cell'
-									// style={{ backgroundColor: grid[rowIndex][cellIndex] ? '#ffe8c1' : 'inherit' }}
+									style={{ backgroundColor: typeof cell === 'number' ? 'lightgrey' : 'inherit' }}
 									onClick={() => openCell(rowIndex, cellIndex)}>
 									{
 										cell === 'closed'
 											? ''
 											: cell === 'mine' 
 												? '!' 
-												: cell
+												: cell === 0
+													? ''
+													: cell
 									}
 								</div>
 							)
