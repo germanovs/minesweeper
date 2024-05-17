@@ -1,0 +1,20 @@
+$cell-border-color: #a4a4a4;
+.grid {
+	display: flex;
+	flex-wrap: wrap;
+	width: 302px;
+	border: 1px solid $cell-border-color;
+	.cell {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		width: 30px;
+		height: 30px;
+		border: 1px solid $cell-border-color;
+		transition: all cubic-bezier(1, 0, 0, 1) 0.2s;
+	}
+	.cell:hover {
+		background-color: var(--bs-gray-300);
+	}
+}
