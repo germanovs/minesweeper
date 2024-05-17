@@ -1,0 +1,1 @@
+type cellState = 'mine' | 'closed' | number;
