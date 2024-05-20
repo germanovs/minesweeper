@@ -54,15 +54,35 @@ function App() {
 		displayGrid[rowIndex][cellIndex] = minesCount;
 
 		if (minesCount === 0) {
+			// top-left
+			if (rowIndex > 0 && cellIndex > 0 && displayGrid[rowIndex - 1][cellIndex - 1] === 'closed' && displayGrid[rowIndex - 1][cellIndex - 1] === 'closed') {
+				defineCellNumber(rowIndex - 1, cellIndex - 1, displayGrid);
+			}
+			// top
 			if (rowIndex > 0 && displayGrid[rowIndex - 1][cellIndex] === 'closed') {
 				defineCellNumber(rowIndex - 1, cellIndex, displayGrid);
 			}
+			// top-right
+			if (rowIndex > 0 && cellIndex < 9 && displayGrid[rowIndex - 1][cellIndex + 1] === 'closed' && displayGrid[rowIndex - 1][cellIndex + 1] === 'closed') {
+				defineCellNumber(rowIndex - 1, cellIndex + 1, displayGrid);
+			}
+			// bottom-left
+			if (rowIndex < 9 && cellIndex > 0 && displayGrid[rowIndex + 1][cellIndex - 1] === 'closed' && displayGrid[rowIndex + 1][cellIndex - 1] === 'closed') {
+				defineCellNumber(rowIndex + 1, cellIndex - 1, displayGrid);
+			}
+			// bottom
 			if (rowIndex < 9 && displayGrid[rowIndex + 1][cellIndex] === 'closed') {
 				defineCellNumber(rowIndex + 1, cellIndex, displayGrid);
 			}
+			// bottom-right
+			if (rowIndex < 9 && cellIndex < 9 && displayGrid[rowIndex + 1][cellIndex + 1] === 'closed' && displayGrid[rowIndex + 1][cellIndex + 1] === 'closed') {
+				defineCellNumber(rowIndex + 1, cellIndex + 1, displayGrid);
+			}
+			// left
 			if (cellIndex > 0 && displayGrid[rowIndex][cellIndex - 1] === 'closed') {
 				defineCellNumber(rowIndex, cellIndex - 1, displayGrid);
 			}
+			// right
 			if (cellIndex < 9 && displayGrid[rowIndex][cellIndex + 1] === 'closed') {
 				defineCellNumber(rowIndex, cellIndex + 1, displayGrid);
 			}
