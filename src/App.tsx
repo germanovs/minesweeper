@@ -3,7 +3,6 @@ import './App.scss'
 
 function App() {
 
-
 	const [minesCount, setMinesCount] = useState<number>(10);
 	const [gameMap, setGameMap] = useState<boolean[]>([]);
 	const [grid, setGrid] = useState<boolean[][]>([]);
@@ -110,7 +109,7 @@ function App() {
 		setDisplayGrid(newDisplayGrid);
 	}
 
-	const markCell = (e, row, col) => {
+	const markCell = (e: React.SyntheticEvent, row: number, col: number) => {
 		e.preventDefault();
 		setDisplayGrid(prev => {
 			const newDisplayGrid = JSON.parse(JSON.stringify(prev));
@@ -124,8 +123,8 @@ function App() {
 	}
 
 	useEffect(() => {
-		const displayGridFlat = displayGrid.flat();
-		if (displayGridFlat.every(elem => elem !== 'closed')) {
+		const openedCellsAmount = displayGrid.flat().filter(elem => typeof elem === 'number');
+		if (openedCellsAmount.length >= 90) {
 			window.alert('You win!');
 		}
 	}, [displayGrid])
